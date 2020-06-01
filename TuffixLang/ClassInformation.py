@@ -28,20 +28,20 @@ def scrape_page():
 
   classes = soup.find('div', attrs = {'class': 'custom_leftpad_20'}).find_all('li', class_="acalog-course")
   class_manifest = [element.text for element in classes]
-  class_information_map = {}
+  ClassInformationMap = {}
   for c in class_manifest:
     check = _r_valid_class.match(c)
     if(check):
       course_title, course_description = check.group("courseId").replace(" ", "-").lower(), check.group("courseDescription").strip()
-      class_information_map[course_title] = course_description
+      ClassInformationMap[course_title] = course_description
 
   with open(class_cache, "w") as fp:
-      json.dump(class_information_map, fp)
+      json.dump(ClassInformationMap, fp)
 
-  return class_information_map
+  return ClassInformationMap
 
 if(os.path.exists(class_cache)):
   with open(class_cache, "r") as fp:
-    class_information_map = json.load(fp)
+    ClassInformationMap = json.load(fp)
 else:
-  class_information_map = scrape_page()
+  ClassInformationMap = scrape_page()
