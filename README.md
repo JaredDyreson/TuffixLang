@@ -2,6 +2,12 @@
 
 This is a simple mnemonic language developed in my spare time to teach myself how lexer, parsers and compilers work.
 
+Install via PIP:
+
+```bash
+sudo pip install git+https://github.com/JaredDyreson/TuffixLang#egg=httpie
+```
+
 There are four components to this build:
 
 - Lexer
