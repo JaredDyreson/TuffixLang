@@ -14,7 +14,7 @@ from datetime import datetime
 import sys
 from termcolor import colored
 
-def cpu_information():
+def CPUInformation():
   path = "/proc/cpuinfo"
   _r_cpu_core_count = re.compile("cpu family.*(?P<count>[0-9].*)")
   _r_general_model_name = re.compile("model name.*\:(?P<name>.*)")
@@ -35,7 +35,7 @@ def cpu_information():
       break
   return "{} ({} cores)".format(name, cores)
 
-def shell_env():
+def ShellEnv():
   _r_shell = r'(?P<shell>[a-z].*sh\s[0-9].*\.[0-9])'
 
   out, _ = subprocess.Popen([os.environ["SHELL"], '--version'],
@@ -50,36 +50,35 @@ def shell_env():
 
   return current_shell_running, current_editor, os.environ["TERM"]
 
-def host():
+def Host():
     return "{}@{}".format(os.environ["USER"], socket.gethostname())
 
-def current_operating_system():
+def CurrentOperatingSystem():
     path = "/etc/os-release"
     _r_OS = r'NAME\=\"(?P<release>[a-zA-Z].*)\"'
     with open(path, "r") as fp: line = fp.readline()
     _OS = re.compile(_r_OS).match(line).group("release")
     return _OS
 
-def uname():
+def Uname():
     path = "/proc/version"
     with open(path, "r") as fp:
         return fp.readline().split()[2]
 
-def current_time():
+def CurrentTime():
     return datetime.now().strftime("%a %d %B %Y %H:%M:%S")
 
-def current_model():
+def CurrentModel():
     product_name = "/sys/devices/virtual/dmi/id/product_name"
     product_family = "/sys/devices/virtual/dmi/id/product_family"
     with open(product_name, "r") as fp:
         name = fp.readline().strip('\n')
     with open(product_family, "r") as fp:
         family = fp.readline().strip('\n')
-    print(name, family)
     return "{}{}".format(name, "" if name not in family else family)
 
 # SOURCE - https://thesmithfam.org/blog/2005/11/19/python-uptime-script/
-def current_uptime():
+def CurrentUptime():
     path = "/proc/uptime"
     with open(path, 'r') as f:
         total_seconds = float(f.readline().split()[0])
@@ -104,7 +103,7 @@ def current_uptime():
 
     return uptime
 
-def memory_information():
+def MemoryInformation():
     formatting = lambda quantity, power: quantity/(1000**power) 
     path = "/proc/meminfo"
     with open(path, "r") as fp:
@@ -112,7 +111,7 @@ def memory_information():
     total, free, available = tuple(contents)
     return int(formatting(total, 2)), formatting(free, 2), formatting(available, 2), (round((free/available), 2))
 
-def graphics_information():
+def GraphicsInformation():
   """
   Use lspci to get the current graphics card in use
   Requires pciutils to be installed
@@ -130,11 +129,14 @@ def graphics_information():
 
 
 def fetch():
-  shell, editor, term = shell_env()
-  physical, _, _, _ = memory_information()
+  shell, editor, term = ShellEnv()
+  physical, _, _, _ = MemoryInformation()
   _fetched = """
+{}
+-----
+
 OS: {}
-Host: {}
+Model: {}
 Kernel: {}
 Uptime: {}
 Shell: {}
@@ -145,18 +147,17 @@ GPU: {}
 Memory: {} GB
 Current Time: {}
   """.format(
-    current_operating_system(),
-    current_model(),
-    uname(),
-    current_uptime(),
+    Host(),
+    CurrentOperatingSystem(),
+    CurrentModel(),
+    Uname(),
+    CurrentUptime(),
     shell,
     editor,
     term,
-    cpu_information(),
-    graphics_information(),
+    CPUInformation(),
+    GraphicsInformation(),
     physical,
-    current_time()
+    CurrentTime()
  )
   print(_fetched)
-
-print(current_model())
