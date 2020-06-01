@@ -2,7 +2,7 @@ from .version import __version__
 from .ClassInformation import ClassInformationMap
 from .Fetch import fetch as Fetch
 from .Lexer import Lexer
-from .TuffixAnsiblePlaybookManager import PlaybookManager, TuffixAnsiblePlaybooks
+from .TuffixAnsiblePlaybookManager import *
 from .TuffixAST import *
 from .TuffixKeywords import TuffixTokenMap
 from .TuffixParser import Parser
@@ -21,7 +21,5 @@ __all__ = [
     'Fetch',
     'Lexer',
     'Parser'
-    'PlaybookManager',
-    'TuffixAnsiblePlaybooks',
     'TuffixTokenMap'
 ]
