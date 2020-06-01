@@ -52,7 +52,7 @@ class Describe(Target):
 
       try:
           print("[+] Information about {}".format(self.target))
-          print(class_information_map[self.target.lower()])
+          print(ClassInformationMap[self.target.lower()])
       except KeyError as error:
           print("[-] Cannot retrieve information about {}".format(self.target))
 
