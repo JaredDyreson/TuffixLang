@@ -30,8 +30,9 @@ setup(
     install_requires = [
       'beautifulsoup4',
       'colored',
-      'llvmlite',
+      'lxml',
       'rply',
+      'requests'
     ],
     include_package_data=True,
     classifiers=['Programming Language :: Python :: 3.8']

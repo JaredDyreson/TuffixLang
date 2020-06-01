@@ -17,7 +17,10 @@ This contains all the information about the computer science classes
 """
 
 # set to conf dir but relative path is okay right now
-class_cache = "cache/California_State_University_CS_Catalog_{}.json".format(datetime.now().year)
+TuffixCacheDir = "cache"
+if(not os.path.isdir(TuffixCacheDir)):
+  os.mkdir(TuffixCacheDir)
+class_cache = "{}/California_State_University_CS_Catalog_{}.json".format(TuffixCacheDir, datetime.now().year)
 
 def scrape_page():
   url = "https://catalog.fullerton.edu/preview_program.php?catoid=61&poid=28640&returnto=7392"
