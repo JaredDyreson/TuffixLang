@@ -75,6 +75,7 @@ def current_model():
         name = fp.readline().strip('\n')
     with open(product_family, "r") as fp:
         family = fp.readline().strip('\n')
+    print(name, family)
     return "{}{}".format(name, "" if name not in family else family)
 
 # SOURCE - https://thesmithfam.org/blog/2005/11/19/python-uptime-script/
