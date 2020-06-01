@@ -1,7 +1,7 @@
 from rply.token import BaseBox
-from ClassInformation import ClassInformationMap
+from TuffixLang.ClassInformation import ClassInformationMap
 from Fetch import fetch
-from TuffixAnsiblePlaybookManager import TuffixAnisblePlaybooks
+from TuffixLang.TuffixAnsiblePlaybookManager import TuffixAnisblePlaybooks, PlaybookManager
 
 """
 TODO:

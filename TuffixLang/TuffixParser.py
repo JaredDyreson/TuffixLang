@@ -1,5 +1,5 @@
 from rply import ParserGenerator
-from TuffixAST import *
+from TuffixLang.TuffixAST import *
 
 class Parser():
     def __init__(self, tokens: dict):

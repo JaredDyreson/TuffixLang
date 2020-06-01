@@ -6,7 +6,7 @@ AUTHOR: Jared Dyreson
 INSTITUTION: California State University Fullerton
 """
 
-from Lexer import Lexer
+from TuffixLang.Lexer import Lexer
 
 cpsc_regex = r'CPSC\-(?P<course>[0-9]{3}[A-Z]?)'
 
