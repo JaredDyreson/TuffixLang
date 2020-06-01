@@ -1,5 +1,5 @@
 from rply.token import BaseBox
-from ClassInformation import class_information_map
+from ClassInformation import ClassInformationMap
 from Fetch import fetch
 from TuffixAnsiblePlaybookManager import TuffixAnisblePlaybooks
 
