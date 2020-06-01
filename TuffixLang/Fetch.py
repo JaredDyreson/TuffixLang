@@ -74,8 +74,8 @@ def current_model():
     with open(product_name, "r") as fp:
         name = fp.readline().strip('\n')
     with open(product_family, "r") as fp:
-        family = fp.readlines().strip('\n')
-    return "{}{}".format(name, "" if family not in name else family)
+        family = fp.readline().strip('\n')
+    return "{}{}".format(name, "" if name not in family else family)
 
 # SOURCE - https://thesmithfam.org/blog/2005/11/19/python-uptime-script/
 def current_uptime():
@@ -157,3 +157,5 @@ Current Time: {}
     current_time()
  )
   print(_fetched)
+
+print(current_model())
