@@ -31,7 +31,7 @@ class Install(Target):
       """
 
       print("[+] Installing {}".format(self.target))
-      print("[+] Running {}_AnisblePlaybook.ansible".format(self.target.replace("-", "_")))
+      print("[+] Running {}_AnsiblePlaybook.ansible".format(self.target.replace("-", "_")))
 
 class Remove(Target):
     def eval(self):
@@ -91,7 +91,7 @@ class ListInstalled(Target):
 class ListAvailable(Target):
     def eval(self):
         print("----- All avaialble codewords -----")
-        for target in TuffixAnisblePlaybooks.keys():
+        for target in TuffixAnsiblePlaybooks.keys():
           print("- Class: {}".format(target.upper()))
 
 class Rekey(Target):

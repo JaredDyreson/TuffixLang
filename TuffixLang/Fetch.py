@@ -153,6 +153,3 @@ Current Time: {}
     current_time()
  )
   print(_fetched)
-
-
-fetch()
