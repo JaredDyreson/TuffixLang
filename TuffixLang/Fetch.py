@@ -69,9 +69,13 @@ def current_time():
     return datetime.now().strftime("%a %d %B %Y %H:%M:%S")
 
 def current_model():
-    path = "/sys/devices/virtual/dmi/id/product_name"
-    with open(path, "r") as fp:
-        return fp.readline().strip('\n')
+    product_name = "/sys/devices/virtual/dmi/id/product_name"
+    product_family = "/sys/devices/virtual/dmi/id/product_family"
+    with open(product_name, "r") as fp:
+        name = fp.readline().strip('\n')
+    with open(product_family, "r") as fp:
+        family = fp.readlines().strip('\n')
+    return "{}{}".format(name, "" if family not in name else family)
 
 # SOURCE - https://thesmithfam.org/blog/2005/11/19/python-uptime-script/
 def current_uptime():
