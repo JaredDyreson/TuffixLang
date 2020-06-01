@@ -2,7 +2,7 @@ from .version import __version__
 from .ClassInformation import ClassInformationMap
 from .Fetch import fetch as Fetch
 from .Lexer import Lexer
-from .TuffixAnsiblePlaybookManager import PlaybookManager, TuffixAnsiblePlaybookManager
+from .TuffixAnsiblePlaybookManager import PlaybookManager, TuffixAnsiblePlaybooks
 from .TuffixAST import *
 from .TuffixKeywords import TuffixTokenMap
 from .TuffixParser import Parser
