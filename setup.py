@@ -2,7 +2,7 @@ from setuptools import setup
 import os
 import sys
 
-PKG_NAME = "cactus"
+PKG_NAME = "TuffixLang"
 
 _here = os.path.abspath(os.path.dirname(__file__))
 
