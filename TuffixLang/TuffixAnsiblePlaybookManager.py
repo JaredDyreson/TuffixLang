@@ -36,7 +36,7 @@ class PlaybookManager():
         self.run_target(target, True) 
 
 
-TuffixAnisblePlaybooks = {
+TuffixAnsiblePlaybooks = {
   "cpsc-120": "CPSC_120_AnsiblePlaybook.ansible"
 }
 

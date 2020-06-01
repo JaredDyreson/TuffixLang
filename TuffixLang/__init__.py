@@ -22,6 +22,6 @@ __all__ = [
     'Lexer',
     'Parser'
     'PlaybookManager',
-    'TuffixAnsiblePlaybookManager',
+    'TuffixAnsiblePlaybooks',
     'TuffixTokenMap'
 ]
