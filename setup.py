@@ -32,6 +32,7 @@ setup(
       'colored',
       'lxml',
       'rply',
+      'termcolor',
       'requests'
     ],
     include_package_data=True,
