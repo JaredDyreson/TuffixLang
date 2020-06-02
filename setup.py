@@ -31,7 +31,7 @@ setup(
       'beautifulsoup4',
       'colored',
       'lxml',
-      'natsorted',
+      'natsort',
       'requests',
       'rply',
       'termcolor'
