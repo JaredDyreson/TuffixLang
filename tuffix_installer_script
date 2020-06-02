@@ -1,13 +1,13 @@
 # this tests the functionality of the tuffix interpreter
 add CPSC-120
 remove CPSC-120
-describe CPSC-120
-status
-installed
-available
-init
-rekey
+#describe CPSC-120
+#status
+#installed
+#available
+#init
+#rekey
 # testing case sensitivity
-REKey
+#REKey
 # testing an invalid selection
-garbage
+#garbage

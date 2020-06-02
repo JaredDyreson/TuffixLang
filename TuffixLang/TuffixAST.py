@@ -12,7 +12,8 @@ TODO:
 - The functions Kevin writes should be imported into this file and assigned correctly
 """
 
-TuffixAnsibleTargetsDir = "/tmp/TuffixLang/AnsibleTargets"
+# TuffixAnsibleTargetsDir = "/etc/tuffix/playbooks"
+TuffixAnsibleTargetsDir = "/home/jared/Projects/SpotifyProject/TuffixLang/AnsibleTargets/"
 TuffixTargetInstalledManifest = "{}/.installed_targets".format(TuffixAnsibleTargetsDir)
 
 class Target(BaseBox):
@@ -38,8 +39,16 @@ class Install(Target):
         TuffixAnsibleTargetsDir, self.target
       )
       if(os.path.isfile(TargetPath)):
-        print("[+] Installing {}".format(self.target))
-        # deploy Ansible script here
+        with open(TuffixTargetInstalledManifest, "r") as fp:
+            contents = fp.read().splitlines()
+        if(self.target in contents):
+          print("[-] Cannot install {} it is already installed".format(self.target))
+        else:
+          print("[+] Installing {}".format(self.target))
+          with open(TuffixTargetInstalledManifest, "w+") as fp:
+            fp.write(self.target)
+            
+          # deploy Ansible script here
       else:
         print("[-] Could not find {} in available installers".format(self.target))
         
@@ -52,14 +61,15 @@ class Remove(Target):
       """
       if(os.path.isfile(TuffixTargetInstalledManifest)):
         with open(TuffixTargetInstalledManifest, "r") as fp:
-            contents = fp.readlines()
+            contents = fp.read().splitlines()
         if(self.target in contents):
-          print("[+] Removing {}")
+          print("[+] Removing {}".format(self.target))
           # run Ansible remove function
+          contents.remove(self.target)
           with open(TuffixTargetInstalledManifest, "w") as fp:
-            fp.write(content.pop(self.target))
+            fp.writelines(contents)
         else:
-          print("[-] Cannot remove {}, it has not been installed yet")
+          print("[-] Cannot remove {}, it has not been installed yet".format(self.target))
 
 class Describe(Target):
     def eval(self):

@@ -120,17 +120,25 @@ def GraphicsInformation():
   # https://stackoverflow.com/questions/13867696/python-in-linux-obtain-vga-specifications-via-lspci-or-hal
 
   graphics_output =  subprocess.check_output("lspci | awk -F':' '/VGA|3D/ {print $3}'", shell=True, executable='/bin/bash').decode("utf-8").split("\n")
-  primary_out = colored("-{} [PRIMARY OUTPUT DEVICE]".format(graphics_output[0].strip()), 'green')
+  primary_out = colored("{}".format(graphics_output[0].strip()), 'green')
   try:
-    secondary_out = colored("-{} [SECONDARY OUTPUT DEVICE]".format(graphics_output[1].strip()))
+    secondary_out = colored("{}".format(graphics_output[1].strip()))
   except IndexError:
-    secondary_out = colored("NONE: [SECONDARY OUTPUT DEVICE]", 'red')
-  return "\n\t{}\n\t{}".format(primary_out, secondary_out)
+    secondary_out = colored("NONE", 'red')
+  return "{}\n{}".format(primary_out, secondary_out)
 
+def GitConfiguration():
+    git_config_output = subprocess.check_output("git config --list | grep -E 'user\..*' | cut -d '=' -f2", shell=True, executable='/bin/bash').decode("utf-8").split('\n')
+
+    return tuple(git_config_output)
 
 def fetch():
   shell, editor, term = ShellEnv()
   physical, _, _, _ = MemoryInformation()
+  git_conf = GitConfiguration()
+  git_email, git_username = git_conf[0], git_conf[1]
+  output_devices = GraphicsInformation().split("\n")
+  primary, secondary = output_devices[0], output_devices[1]
   _fetched = """
 {}
 -----
@@ -143,9 +151,15 @@ Shell: {}
 Editor: {}
 Terminal: {}
 CPU: {}
-GPU: {}
+GPU:
+  - Primary: {}
+  - Secondary: {}
 Memory: {} GB
 Current Time: {}
+Git Configuration:
+  - Email: {}
+  - Username: {}
+
   """.format(
     Host(),
     CurrentOperatingSystem(),
@@ -156,8 +170,11 @@ Current Time: {}
     editor,
     term,
     CPUInformation(),
-    GraphicsInformation(),
+    primary,
+    secondary,
     physical,
-    CurrentTime()
+    CurrentTime(),
+    git_email,
+    git_username
  )
   print(_fetched)

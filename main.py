@@ -7,7 +7,7 @@ from rply.errors import LexingError
 
 """
 Driver code for the Tuffix Installer Prompt
-AUTHOR: Jared Dyresonm
+AUTHOR: Jared Dyreson
 INSTITUTION: California State University Fullerton
 """
 
@@ -44,6 +44,7 @@ def TuffixScript(path: str):
         Parser.parse(lexer.lex(line)).eval()
   except Exception as error:
       print("[-] Invalid selection of {} received, stop".format(CurrentLine.strip()))
+      print(error)
       pass
 
 TuffixScript("tuffix_installer_script")

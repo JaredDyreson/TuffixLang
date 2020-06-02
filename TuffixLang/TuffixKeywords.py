@@ -20,7 +20,7 @@ TuffixTokenMap = {
   "LIST_AVAILABLE": r'(?i)available',
   "DESCRIBE": r'(?i)describe',
   "REKEY": r'(?i)rekey',
-  "STATUS": r'(?i)status',
+  "STATUS": r'(?i)(check)?status',
   "TARGET": cpsc_regex,
   "HELP": r'(?i)help',
 
