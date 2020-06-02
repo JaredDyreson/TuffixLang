@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# package the Debian
+# package the Debian for installation
 # AUTHOR: Jared Dyreson
 # INSTITUTION: California State University Fullerton
 
@@ -19,17 +19,28 @@ function aarch_err_(){
   exit
 }
 
+function update_and_build_pkg_(){
+  pkg_name="tuffix"
+  base="$1"
+  revision="$(awk '/Version:/ {print $2}' "$base"/DEBIAN/control | cut -d "-" -f1)"
+  current_version="$(awk '/Version:/ {print $2}' "$base"/DEBIAN/control | cut -d "-" -f2)"
+  new_version=$((current_version+1))
+  find "$base" -type f -not -path "*DEBIAN*" -exec chmod 755 {} \;
+
+  sed -i "s/Version: .*/Version: $revision-$new_version/" "$base"/DEBIAN/control
+  echo "[+] Updated tuffix-installer from version $current_version to $new_version"
+  output_name=""$pkg_name"_"$revision"_"$new_version"_amd64.deb"
+  dpkg-deb --build "$base" "$output_name"
+  # if you want it to automatically open the installer window
+  # it will automatically install dependencies using the GUI version because it uses
+  # APT as the backend rather than DPKG
+  xdg-open "$output_name" > /dev/null 2>&1 & disown
+}
+
 [[ -z "$@" ]] && arg_err_
 
 [[ "$(uname -a | grep -i "ubuntu")" ]] || aarch_err_
 
 [[ ! -d "$1" ]] && dir_dne
 
-base="$1"
-revision="$(awk '/Version:/ {print $2}' "$base"/DEBIAN/control | cut -d "-" -f1)"
-current_version="$(awk '/Version:/ {print $2}' "$base"/DEBIAN/control | cut -d "-" -f2)"
-new_version=$((current_version+1))
-find "$base" -type f -not -path "*DEBIAN*" -exec chmod 755 {} \;
-
-sed -i "s/Version: .*/Version: $revision-$new_version/" "$base"/DEBIAN/control
-echo "[+] Updated tuffix-installer from version $current_version to $new_version"
+update_and_build_pkg_
