@@ -51,6 +51,9 @@ class Parser():
         @self.pg.production('expression : REKEY')
         def start_rekey(p):
             return Rekey(p)
+        @self.pg.production('expression : HELP')
+        def help_message(p):
+            return Help(p)
 
         @self.pg.error
         def error_handle(token):

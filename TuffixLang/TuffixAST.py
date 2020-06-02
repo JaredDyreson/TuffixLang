@@ -103,3 +103,17 @@ class Status(Target):
        print("----- BEGIN Information about host -----")
        fetch()
        print("----- END Information about host -----")
+
+class Help(Target):
+    def eval(self):
+      HelpMessage = """
+      init:\t\tinstall fundamental packages and guides you through the necessary steps to have a fully configured version of Ubuntu
+      add [class]:\t\tinstall required software for a given class
+      remove [class]:\t\tremove the required software for a given class, but preserves work done
+      installed:\t\tlist all installed required software
+      available:\t\tlist all available classes that have required software and according configuration files
+      describe [class]:\t\tgive a brief summary of what the given class is
+      rekey:\t\tregenerate SSH and/or GPG key
+      status:\t\tthe status of the host computer such as but not limited to codewords installed, OS version, user information, git configuration.
+      """
+      print(HelpMessage)

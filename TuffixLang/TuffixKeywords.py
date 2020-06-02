@@ -22,6 +22,7 @@ TuffixTokenMap = {
   "REKEY": r'(?i)rekey',
   "STATUS": r'(?i)status',
   "TARGET": cpsc_regex,
+  "HELP": r'(?i)help',
 
   # syntax
   "COMMENT": r'^\#.*[a-zA-Z0-9]',
