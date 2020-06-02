@@ -11,41 +11,39 @@ AUTHOR: Jared Dyresonm
 INSTITUTION: California State University Fullerton
 """
 
-def tuffix_prompt():
-  current_line = None 
-  lexer = Lexer(TuffixTokenMap).get_lexer()
-  pg = Parser(TuffixTokenMap)
-  pg.parse()
-  parser = pg.get_parser()
+CurrentLine = None
+lexer = Lexer(TuffixTokenMap).get_lexer()
+PG = Parser(TuffixTokenMap)
+PG.parse()
+Parser = PG.get_parser()
+BeenInitialized = False
 
+def TuffixPrompt():
   while(True):
-    current_line = input(">>> ")
     try:
-      parser.parse(lexer.lex(current_line)).eval()
-    except LexingError:
-      print("[-] Invalid selection of {}, stop".format(current_line.strip()))
+      CurrentLine = input(">>> ")
+      if(not CurrentLine):
+        continue
+      Parser.parse(lexer.lex(CurrentLine)).eval()
+    except LexingError as error:
+      print("[-] Invalid selection of {}, stop".format(CurrentLine.strip()))
+      print(error)
+    except (EOFError, KeyboardInterrupt):
+      quit()
 
 """
 Reading a file, simulating the instructions given to the interpreter
 """
 
-def tuffix_script(path: str):
-
-  current_line = None
-  lexer = Lexer(TuffixTokenMap).get_lexer()
+def TuffixScript(path: str):
   with open(path, "r") as fp: content = fp.readlines()
-  pg = Parser(TuffixTokenMap)
-  pg.parse()
-  parser = pg.get_parser()
 
   try:
       for line in content:
-        current_line = line
-        parser.parse(lexer.lex(line)).eval()
+        CurrentLine = line
+        Parser.parse(lexer.lex(line)).eval()
   except Exception as error:
-      print("[-] Invalid selection of {} received, stop".format(current_line.strip()))
+      print("[-] Invalid selection of {} received, stop".format(CurrentLine.strip()))
       pass
 
-# tuffix_script("tuffix_installer_script")
-
-tuffix_prompt()
+TuffixScript("tuffix_installer_script")

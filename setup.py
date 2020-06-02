@@ -20,7 +20,7 @@ with open(os.path.join(_here, PKG_NAME, 'version.py')) as f:
 setup(
     name = PKG_NAME,
     version=version['__version__'],
-    description=('A toy language framework written in Python'),
+    description=('An basic interpreter for the Tuffix Project'),
     long_description=long_description,
     author='Jared Dyreson',
     author_email='jareddyreson@csu.fullerton.edu',
@@ -31,9 +31,10 @@ setup(
       'beautifulsoup4',
       'colored',
       'lxml',
+      'natsorted',
+      'requests',
       'rply',
-      'termcolor',
-      'requests'
+      'termcolor'
     ],
     include_package_data=True,
     classifiers=['Programming Language :: Python :: 3.8']

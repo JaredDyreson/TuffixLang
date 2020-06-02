@@ -13,19 +13,19 @@ class Parser():
         def epxression_target(p):
             return Target(str(p[0].getstr()))
 
-        @self.pg.production('expression : ADD')
+        @self.pg.production('expression : ADD TARGET')
         def install(p):
-            target = str(p[0].getstr()).split()[1]
+            target = p[1].getstr().strip()
             return Install(target)
 
-        @self.pg.production('expression : REMOVE')
+        @self.pg.production('expression : REMOVE TARGET')
         def remove(p):
-            target = str(p[0].getstr()).split()[1]
+            target = p[1].getstr().strip()
             return Remove(target)
 
-        @self.pg.production('expression : DESCRIBE_TARGET')
+        @self.pg.production('expression : DESCRIBE TARGET')
         def describe(p):
-            target = str(p[0].getstr()).split()[1]
+            target = p[1].getstr().strip()
             return Describe(target)
 
         @self.pg.production('expression : STATUS')
