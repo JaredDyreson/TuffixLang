@@ -22,25 +22,26 @@ This takes in a "token map", which is just a dictionary that has a string associ
 Here is the one we are using in this project:
 
 ```python
-cpsc_regex = r'CPSC\-(?P<course>[0-9]{3}[A-Z]?)'
-
 TuffixTokenMap = {
 
   # builtin functions
   "INIT": r'(?i)init',
-  "ADD": r'(?i)add.*CPSC\-(?P<course>[0-9]{3}[A-Z]?)',
-  "REMOVE": r'(?i)remove.*CPSC\-(?P<course>[0-9]{3}[A-Z]?)',
+  "ADD": r'(?i)add',
+  "REMOVE": r'(?i)remove',
   "LIST_INSTALLED": r'(?i)installed',
   "LIST_AVAILABLE": r'(?i)available',
-  "DESCRIBE_TARGET": r'(?i)describe.*CPSC\-(?P<course>[0-9]{3}[A-Z]?)',
+  "DESCRIBE": r'(?i)describe',
   "REKEY": r'(?i)rekey',
-  "STATUS": r'(?i)status',
-  "TARGET": cpsc_regex,
+  "STATUS": r'(?i)(check)?status',
+  "HELP": r'(?i)help',
 
   # syntax
   "COMMENT": r'^\#.*[a-zA-Z0-9]',
 
+  # data types
+  "TARGET": r'CPSC\-(?P<course>[0-9]{3}[A-Z]?)'
 }
+
 ```
 And we are ignoring spaces by default.
 
