@@ -39,7 +39,7 @@ TuffixTokenMap = {
   "COMMENT": r'^\#.*[a-zA-Z0-9]',
 
   # data types
-  "TARGET": r'CPSC\-(?P<course>[0-9]{3}[A-Z]?)'
+  "TARGET": r'(?i:CPSC)\-(?P<course>[0-9]{3}[A-Z]?)'
 }
 
 ```

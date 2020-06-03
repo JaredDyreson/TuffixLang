@@ -132,6 +132,17 @@ def GitConfiguration():
 
     return tuple(git_config_output)
 
+def HasInternet():
+    # https://stackoverflow.com/questions/20913411/test-if-an-internet-connection-is-present-in-python/20913928
+    SERVER = "1.1.1.1"
+    try:
+      host = socket.gethostbyname(SERVER)
+      socket.create_connection((host, 80), 2).close()
+      return True
+    except Exception as e: 
+      pass
+    return False
+
 def fetch():
   shell, editor, term = ShellEnv()
   physical, _, _, _ = MemoryInformation()
@@ -159,6 +170,9 @@ Current Time: {}
 Git Configuration:
   - Email: {}
   - Username: {}
+Installed codewords:
+  {}
+Connected to Internet: {}
 
   """.format(
     Host(),
@@ -175,6 +189,9 @@ Git Configuration:
     physical,
     CurrentTime(),
     git_email,
-    git_username
+    git_username,
+    "HELLO WORLD\nANOTHER WORLD",
+    "Yes" if HasInternet() else "No"
  )
   print(_fetched)
+fetch()

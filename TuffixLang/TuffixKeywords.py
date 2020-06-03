@@ -8,8 +8,6 @@ INSTITUTION: California State University Fullerton
 
 from TuffixLang.Lexer import Lexer
 
-cpsc_regex = r'CPSC\-(?P<course>[0-9]{3}[A-Z]?)'
-
 TuffixTokenMap = {
 
   # builtin functions
@@ -21,11 +19,12 @@ TuffixTokenMap = {
   "DESCRIBE": r'(?i)describe',
   "REKEY": r'(?i)rekey',
   "STATUS": r'(?i)(check)?status',
-  "TARGET": cpsc_regex,
   "HELP": r'(?i)help',
 
   # syntax
   "COMMENT": r'^\#.*[a-zA-Z0-9]',
 
+  # data types
+  "TARGET": r'(?i:CPSC)\-(?P<course>[0-9]{3}[A-Z]?)'
 }
 

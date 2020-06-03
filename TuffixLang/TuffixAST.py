@@ -1,7 +1,8 @@
 from rply.token import BaseBox
 from TuffixLang.ClassInformation import ClassInformationMap
 from TuffixLang.Fetch import fetch
-from TuffixLang.TuffixAnsiblePlaybookManager import *
+from TuffixLang.TuffixAnsiblePlaybookManager import PlaybookManager
+from TuffixLang.TuffixConstants import TuffixAnsibleTargetDir
 import os
 from natsort import natsorted, ns
 
@@ -12,9 +13,7 @@ TODO:
 - The functions Kevin writes should be imported into this file and assigned correctly
 """
 
-# TuffixAnsibleTargetsDir = "/etc/tuffix/playbooks"
-TuffixAnsibleTargetsDir = "/home/jared/Projects/SpotifyProject/TuffixLang/AnsibleTargets/"
-TuffixTargetInstalledManifest = "{}/.installed_targets".format(TuffixAnsibleTargetsDir)
+Manager = PlaybookManager(TuffixAnsibleTargetDir)
 
 class Target(BaseBox):
     def __init__(self, target):
@@ -35,22 +34,7 @@ class Install(Target):
       CPSC-121_AnsiblePlaybook.yml
       """
 
-      TargetPath = "{}/{}_AnsiblePlaybook.yml".format(
-        TuffixAnsibleTargetsDir, self.target
-      )
-      if(os.path.isfile(TargetPath)):
-        with open(TuffixTargetInstalledManifest, "r") as fp:
-            contents = fp.read().splitlines()
-        if(self.target in contents):
-          print("[-] Cannot install {} it is already installed".format(self.target))
-        else:
-          print("[+] Installing {}".format(self.target))
-          with open(TuffixTargetInstalledManifest, "w+") as fp:
-            fp.write(self.target)
-            
-          # deploy Ansible script here
-      else:
-        print("[-] Could not find {} in available installers".format(self.target))
+      Manager.InstallTarget(target=self.target, install=True)
         
 class Remove(Target):
     def eval(self):
@@ -59,17 +43,8 @@ class Remove(Target):
       Naming scheme example should be:
       CPSC-121_AnsiblePlaybook.yml
       """
-      if(os.path.isfile(TuffixTargetInstalledManifest)):
-        with open(TuffixTargetInstalledManifest, "r") as fp:
-            contents = fp.read().splitlines()
-        if(self.target in contents):
-          print("[+] Removing {}".format(self.target))
-          # run Ansible remove function
-          contents.remove(self.target)
-          with open(TuffixTargetInstalledManifest, "w") as fp:
-            fp.writelines(contents)
-        else:
-          print("[-] Cannot remove {}, it has not been installed yet".format(self.target))
+
+      Manager.InstallTarget(target=self.target, install=False)
 
 class Describe(Target):
     def eval(self):
@@ -119,8 +94,7 @@ class ListInstalled(Target):
 class ListAvailable(Target):
     def eval(self):
         print("----- All avaialble codewords -----")
-        for target in natsorted(os.listdir(TuffixAnsibleTargetsDir), alg=ns.IC):
-          print("- Class: {}".format(target.split("_")[0]))
+        Manager.ShowAvailableTargets()
 
 class Rekey(Target):
     def eval(self):
