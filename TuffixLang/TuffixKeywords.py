@@ -23,10 +23,13 @@ TuffixTokenMap = {
   "HELP": r'(?i)help',
 
   # syntax
-  "COMMENT": r'^\#.*[a-zA-Z0-9]',
+  "COMMENT": r'^\#[^\!].*[a-zA-Z0-9]',
   "GLOB": r'\*|(?i:all)',
 
   # data types
-  "TARGET": r'(?i:CPSC)\-(?P<course>[0-9]{3}[A-Z]?)'
+  "TARGET": r'(?i:CPSC)\-(?P<course>[0-9]{3}[A-Z]?)',
+
+  # environment variable  
+  "ENV": r'^\#\!\/usr\/bin\/env\s(?P<env>.*)'
 }
 

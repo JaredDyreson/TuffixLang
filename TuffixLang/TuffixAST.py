@@ -75,6 +75,13 @@ class Ignore(Target):
         """
         pass
 
+class PrintEnv(Target):
+    def eval(self):
+        """
+        Print environment variable
+        """
+        print("[INFO] Current runtime environment is {}".format(self.target))
+
 class Initialize(Target):
     def eval(self):
         """
@@ -104,6 +111,7 @@ class ListAvailable(Target):
     def eval(self):
         print("----- All avaialble codewords -----")
         Manager.ShowAvailableTargets()
+        print("-----------------------------------")
 
 class Rekey(Target):
     def eval(self):

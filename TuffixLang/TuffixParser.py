@@ -45,6 +45,11 @@ class Parser():
         def ignore_comment(p):
             return Ignore(p)
 
+        @self.pg.production('expression : ENV')
+        def print_env(p):
+            environment = p[0].getstr().strip().split()[1]
+            return PrintEnv(environment)
+
         @self.pg.production('expression : INIT')
         def initialize_tuffix(p):
             return Initialize(p)
