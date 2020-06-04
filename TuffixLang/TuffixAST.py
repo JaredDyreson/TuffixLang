@@ -46,6 +46,14 @@ class Remove(Target):
 
       Manager.InstallTarget(target=self.target, install=False)
 
+class Reinstall(Target):
+   def eval(self):
+      """
+      Re-run the specific playbook, regardless if it has been run before
+      """
+
+      Manager.ReinstallTarget(target=self.target)
+
 class Describe(Target):
     def eval(self):
       """
@@ -58,6 +66,7 @@ class Describe(Target):
           print(ClassInformationMap[self.target.lower()])
       except KeyError as error:
           print("[-] Cannot retrieve information about {}".format(self.target))
+
 
 class Ignore(Target):
     def eval(self):

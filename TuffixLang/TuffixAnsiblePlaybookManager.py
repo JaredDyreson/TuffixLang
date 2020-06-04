@@ -15,7 +15,7 @@ class PlaybookManager():
           raise FileNotFoundError("[-] Cannot find path to playbooks at {}".format(self.playbook_dir))
         self.manifest = self.ObtainManifest()
 
-    def InstallTarget(self, target: str, install=True):
+    def InstallTarget(self, target: str, install=True, override=False):
         """
         Run a target based on a dictionary mapping system
         Exception is raised there is not an associated playbook
@@ -24,7 +24,7 @@ class PlaybookManager():
         with open(TuffixTargetInstalledManifest, "r") as fp:
             contents = fp.read().splitlines()
         if(install):
-          if(self.IsInstalled(target=target)):
+          if(self.IsInstalled(target=target) and not override):
             print("[-] Cannot proceed, {} is already installed".format(target))
           else:
             print("[+] Installing {} .....".format(target))
@@ -45,6 +45,19 @@ class PlaybookManager():
         """
 
         self.InstallTarget(target, False) 
+
+    def ReinstallTarget(self, target : str):
+        """
+        Re-run the specific playbook, regardless if it has been run before
+        """
+        if(target == "*"):
+          print("[+] Reinstalling all targets")
+          with open(TuffixTargetInstalledManifest, "r") as fp:
+            content = fp.read().splitlines()
+          for target in content:
+            self.InstallTarget(target, install=True, override=True)
+        else:
+            self.InstallTarget(target, install=True, override=True)
 
     def ObtainManifest(self) -> dict:
         manifest = {}

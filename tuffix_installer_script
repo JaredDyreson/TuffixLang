@@ -5,6 +5,8 @@ describe CPSC-120
 #status
 #installed
 available
+reinstall CPSC-121
+reinstall *
 #init
 #rekey
 # testing case sensitivity

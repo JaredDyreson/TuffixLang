@@ -194,4 +194,3 @@ Connected to Internet: {}
     "Yes" if HasInternet() else "No"
  )
   print(_fetched)
-fetch()

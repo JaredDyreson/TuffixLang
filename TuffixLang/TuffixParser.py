@@ -23,6 +23,15 @@ class Parser():
             target = p[1].getstr().strip()
             return Remove(target)
 
+        @self.pg.production('expression : REINSTALL TARGET')
+        def reinstall(p):
+            target = p[1].getstr().strip()
+            return Reinstall(target)
+
+        @self.pg.production('expression : REINSTALL GLOB')
+        def reinstall_complete(p):
+            return Reinstall("*")
+
         @self.pg.production('expression : DESCRIBE TARGET')
         def describe(p):
             target = p[1].getstr().strip()
