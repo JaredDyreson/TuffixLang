@@ -21,7 +21,7 @@ TuffixTokenMap = {
   "REKEY": r'(?i)rekey',
   "STATUS": r'(?i)check|status',
   "HELP": r'(?i)help',
-  "QUIT": r'(?i)quit',
+  "QUIT": r'(?i)exit|quit',
 
   # syntax
   "COMMENT": r'^\#[^\!].*[a-zA-Z0-9]',

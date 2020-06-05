@@ -39,7 +39,7 @@ class PlaybookManager():
             contents = CurrentlyInstalled()
             contents.remove(target.upper())
             with open(TuffixTargetInstalledManifest, "w") as fp:
-              fp.writelines(contents)
+              fp.write('\n'.join(contents) + '\n')
           else:
             print("[-] Cannot remove {}, it is not installed".format(target))
 
