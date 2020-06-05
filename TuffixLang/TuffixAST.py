@@ -1,10 +1,12 @@
 from rply.token import BaseBox
 from TuffixLang.ClassInformation import ClassInformationMap
 from TuffixLang.Fetch import fetch
-from TuffixLang.TuffixAnsiblePlaybookManager import PlaybookManager
+from TuffixLang.TuffixAnsiblePlaybookManager import PlaybookManager, CurrentlyInstalled, CurrentlyInstalledFormatted
 from TuffixLang.TuffixConstants import TuffixAnsibleTargetDir
+from TuffixLang.TuffixHelpMessage import HelpMessageMap
 import os
 from natsort import natsorted, ns
+import itertools
 
 """
 TODO:
@@ -26,6 +28,9 @@ class Target(BaseBox):
 
         print("Target: {}".format(self.target))
 
+    # def info(self, message : str):
+      # return "{0: <32} {1}".format(type(self).__name__+":", message)
+
 class Install(Target):
     def eval(self):
       """
@@ -33,9 +38,8 @@ class Install(Target):
       Naming scheme example should be:
       CPSC-121_AnsiblePlaybook.yml
       """
-
       Manager.InstallTarget(target=self.target, install=True)
-        
+
 class Remove(Target):
     def eval(self):
       """
@@ -82,6 +86,14 @@ class PrintEnv(Target):
         """
         print("[INFO] Current runtime environment is {}".format(self.target))
 
+class Die(Target):
+    """
+    A way to kill current interpreter process
+    """
+
+    def eval(self):
+      raise EOFError("[+] Killing process!")
+
 class Initialize(Target):
     def eval(self):
         """
@@ -104,8 +116,10 @@ class ListInstalled(Target):
         List all of the installed packages
         Read from configuration file
         """
-
-        print("Listing installed packages.....")
+        print("----- All installed targets -------")
+        for target in CurrentlyInstalledFormatted():
+          print(target)
+        print("-----------------------------------")
 
 class ListAvailable(Target):
     def eval(self):
@@ -125,14 +139,5 @@ class Status(Target):
 
 class Help(Target):
     def eval(self):
-      HelpMessage = """
-      init:\t\tinstall fundamental packages and guides you through the necessary steps to have a fully configured version of Ubuntu
-      add [class]:\t\tinstall required software for a given class
-      remove [class]:\t\tremove the required software for a given class, but preserves work done
-      installed:\t\tlist all installed required software
-      available:\t\tlist all available classes that have required software and according configuration files
-      describe [class]:\t\tgive a brief summary of what the given class is
-      rekey:\t\tregenerate SSH and/or GPG key
-      status:\t\tthe status of the host computer such as but not limited to codewords installed, OS version, user information, git configuration.
-      """
-      print(HelpMessage)
+      for option, body in HelpMessageMap.items():
+        print(f'{option: <45}{body}')

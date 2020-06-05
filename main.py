@@ -1,11 +1,13 @@
 #!/usr/bin/env python3.8
 
+from TuffixLang.version import __version__ as version
 from TuffixLang.TuffixParser import Parser
 from TuffixLang.Lexer import Lexer
 from TuffixLang.TuffixKeywords import TuffixTokenMap
 from rply.errors import LexingError
-import readline
-# ^ this makes our lives SOOO much easier
+import readline # this makes our lives SOOO much easier
+import os
+import platform
 
 """
 Driver code for the Tuffix Installer Prompt
@@ -21,16 +23,26 @@ Parser = PG.get_parser()
 BeenInitialized = False
 
 def TuffixPrompt():
+  Preamble = """Tuffix {}
+[Python {}] on Linux
+Type "help", "credits" for more information
+""".format(version, platform.python_version())
+
+  os.system('clear')
+  print(Preamble)
+
   while(True):
     try:
-      CurrentLine = input(">>> ")
+      CurrentLine = input(">>> ").strip()
       if(not CurrentLine):
         continue
       Parser.parse(lexer.lex(CurrentLine)).eval()
     except LexingError as error:
-      print("[-] Invalid selection of {}, stop".format(CurrentLine.strip()))
-      print(error)
+      print("[-] Invalid selection of {}, stop".format(CurrentLine))
     except (EOFError, KeyboardInterrupt):
+      quit()
+    except Exception as error:
+      print("[INFO] An error has occurred, exiting\n{}".format(error))
       quit()
 
 """

@@ -1,12 +1,12 @@
 #!/usr/bin/env tuffix
 # this tests the functionality of the tuffix interpreter
 add CPSC-120
-remove CPSC-120
+#remove CPSC-120
 describe CPSC-120
 #status
 #installed
 available
-reinstall CPSC-121
+reinstall CPSC-120
 reinstall *
 #init
 #rekey

@@ -12,15 +12,16 @@ TuffixTokenMap = {
 
   # builtin functions
   "INIT": r'(?i)init',
-  "ADD": r'(?i)add',
-  "REMOVE": r'(?i)remove',
+  "ADD": r'(?i)add|install',
+  "REMOVE": r'(?i)delete|remove',
   "REINSTALL": r'(?i)reinstall',
-  "LIST_INSTALLED": r'(?i)installed',
+  "LIST_INSTALLED": r'(?i)ls|installed',
   "LIST_AVAILABLE": r'(?i)available',
   "DESCRIBE": r'(?i)describe',
   "REKEY": r'(?i)rekey',
-  "STATUS": r'(?i)(check)?status',
+  "STATUS": r'(?i)check|status',
   "HELP": r'(?i)help',
+  "QUIT": r'(?i)quit',
 
   # syntax
   "COMMENT": r'^\#[^\!].*[a-zA-Z0-9]',

@@ -13,6 +13,7 @@ import socket
 from datetime import datetime
 import sys
 from termcolor import colored
+from TuffixLang.TuffixAnsiblePlaybookManager import CurrentlyInstalled, CurrentlyInstalledFormatted
 
 def CPUInformation():
   path = "/proc/cpuinfo"
@@ -190,7 +191,7 @@ Connected to Internet: {}
     CurrentTime(),
     git_email,
     git_username,
-    "HELLO WORLD\nANOTHER WORLD",
+    '\n'.join(CurrentlyInstalledFormatted()).strip() if (len(CurrentlyInstalled()) != 0) else "None",
     "Yes" if HasInternet() else "No"
  )
   print(_fetched)
