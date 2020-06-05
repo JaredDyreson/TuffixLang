@@ -1,16 +1,21 @@
 #!/usr/bin/env tuffix
+
 # this tests the functionality of the tuffix interpreter
+# written by Jared Dyreson
+
 add CPSC-120
-#remove CPSC-120
+remove CPSC-120
+# TODO
+# remove all / remove *
 describe CPSC-120
-#status
-#installed
+status
+ls
 available
 reinstall CPSC-120
 reinstall *
-#init
-#rekey
+init
+rekey
 # testing case sensitivity
-#REKey
+REKey
 # testing an invalid selection
-#garbage
+garbage

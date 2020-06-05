@@ -7,7 +7,6 @@ INSTITUTION: Calfornia State University Fullerton
 import os
 from TuffixLang.TuffixConstants import TuffixAnsibleTargetDir, TuffixTargetInstalledManifest
 from natsort import natsorted, ns
-from TuffixLang.Debug import dump_args
 
 class PlaybookManager():
     def __init__(self, playbook_dir : str):
@@ -16,7 +15,6 @@ class PlaybookManager():
           raise FileNotFoundError("[-] Cannot find path to playbooks at {}".format(self.playbook_dir))
         self.manifest = self.ObtainManifest()
 
-    @dump_args
     def InstallTarget(self, target: str, install=True, override=False):
         """
         Run a target based on a dictionary mapping system
@@ -43,7 +41,6 @@ class PlaybookManager():
           else:
             print("[-] Cannot remove {}, it is not installed".format(target))
 
-    @dump_args
     def RemoveTarget(self, target : str):
         """
         Do the reverse of InstallTarget
