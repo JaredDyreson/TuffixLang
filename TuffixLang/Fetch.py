@@ -158,7 +158,7 @@ def CurrentlyInstalledTargets() -> list:
     return ""
   
 
-def fetch():
+def Fetch():
   shell, editor, term = ShellEnv()
   physical, _, _, _ = MemoryInformation()
   git_conf = GitConfiguration()
