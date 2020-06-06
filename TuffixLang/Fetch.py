@@ -15,9 +15,8 @@ import sys
 from termcolor import colored
 import json
 from natsort import natsorted, ns
-# from TuffixLang.TuffixAnsiblePlaybookManager import CurrentlyInstalled, CurrentlyInstalledFormatted
 
-TuffixStatePath = "/home/jared/Desktop/state.txt"
+TuffixStatePath = "/var/lib/tuffix/state.json"
 
 def CPUInformation():
   path = "/proc/cpuinfo"
