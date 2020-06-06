@@ -34,10 +34,10 @@ def CPUInformation():
     if(core_match and cores is None):
       cores = core_match.group("count")
     elif(model_match and name is None):
-      name = model_match.group("name").strip()
+      name = model_match.group("name")
     elif(cores and name):
       break
-  return "{} ({} cores)".format(name, cores)
+  return "{} ({} cores)".format(' '.join(name.split()), cores)
 
 def ShellEnv():
   _r_shell = r'(?P<shell>[a-z].*sh\s[0-9].*\.[0-9])'
@@ -210,4 +210,3 @@ Connected to Internet: {}
     "Yes" if HasInternet() else "No"
  )
   print(_fetched)
-fetch()
