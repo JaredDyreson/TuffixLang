@@ -1,6 +1,6 @@
 from .version import __version__
 from .ClassInformation import ClassInformationMap
-from .Fetch import fetch as Fetch
+from .Fetch import Fetch
 from .Lexer import Lexer
 from .TuffixAnsiblePlaybookManager import *
 from .TuffixAST import *
