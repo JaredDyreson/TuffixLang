@@ -1,6 +1,6 @@
 from rply.token import BaseBox
 from TuffixLang.ClassInformation import ClassInformationMap
-from TuffixLang.Fetch import fetch
+from TuffixLang.Fetch import Fetch
 from TuffixLang.TuffixAnsiblePlaybookManager import PlaybookManager, CurrentlyInstalled, CurrentlyInstalledFormatted
 from TuffixLang.TuffixConstants import TuffixAnsibleTargetDir
 from TuffixLang.TuffixHelpMessage import HelpMessageMap
@@ -134,7 +134,7 @@ class Rekey(Target):
 class Status(Target):
     def eval(self):
        print("----- BEGIN Information about host -----")
-       fetch()
+       Fetch()
        print("----- END Information about host -----")
 
 class Help(Target):
