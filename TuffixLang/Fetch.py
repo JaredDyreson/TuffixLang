@@ -127,6 +127,8 @@ def GraphicsInformation():
   primary_out = colored("{}".format(graphics_output[0].strip()), 'green')
   try:
     secondary_out = colored("{}".format(graphics_output[1].strip()))
+    if(not secondary_out):
+      secondary_out = colored("NONE", 'red')
   except IndexError:
     secondary_out = colored("NONE", 'red')
   return "{}\n{}".format(primary_out, secondary_out)
