@@ -13,7 +13,11 @@ import socket
 from datetime import datetime
 import sys
 from termcolor import colored
-from TuffixLang.TuffixAnsiblePlaybookManager import CurrentlyInstalled, CurrentlyInstalledFormatted
+import json
+from natsort import natsorted, ns
+# from TuffixLang.TuffixAnsiblePlaybookManager import CurrentlyInstalled, CurrentlyInstalledFormatted
+
+TuffixStatePath = "/home/jared/Desktop/state.txt"
 
 def CPUInformation():
   path = "/proc/cpuinfo"
@@ -144,6 +148,17 @@ def HasInternet():
       pass
     return False
 
+def CurrentlyInstalledTargets() -> list:
+  try:
+    with open(TuffixStatePath, "r") as fp:
+      content = json.load(fp)["installed"]
+    return [f'{"- ": >4}{element}' for element in natsorted(content, alg=ns.IC)]
+  except FileNotFoundError as error:
+    # raise proper exception defined in TuffixLib
+    print("[INFO] Please initalize tuffix")
+    return ""
+  
+
 def fetch():
   shell, editor, term = ShellEnv()
   physical, _, _, _ = MemoryInformation()
@@ -151,6 +166,7 @@ def fetch():
   git_email, git_username = git_conf[0], git_conf[1]
   output_devices = GraphicsInformation().split("\n")
   primary, secondary = output_devices[0], output_devices[1]
+  installed_targets = CurrentlyInstalledTargets()
   _fetched = """
 {}
 -----
@@ -191,7 +207,8 @@ Connected to Internet: {}
     CurrentTime(),
     git_email,
     git_username,
-    '\n'.join(CurrentlyInstalledFormatted()).strip() if (len(CurrentlyInstalled()) != 0) else "None",
+    '\n'.join(installed_targets).strip() if (len(installed_targets) !=  0) else "None",
     "Yes" if HasInternet() else "No"
  )
   print(_fetched)
+fetch()

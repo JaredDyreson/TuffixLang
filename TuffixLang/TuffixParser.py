@@ -83,6 +83,8 @@ class Parser():
 
         @self.pg.error
         def error_handle(token):
+            print(token)
+            print("an error has occured")
             raise Exception(token)
 
     def get_parser(self):
