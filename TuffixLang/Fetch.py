@@ -40,8 +40,7 @@ def CPUInformation() -> str:
     elif(model_match and name is None):
       name = model_match.group("name")
     elif(cores and name):
-      break
-  return "{} ({} cores)".format(' '.join(name.split()), cores)
+      return "{} ({} cores)".format(' '.join(name.split()), cores)
 
 def CurrentNonRootUser() -> str:
     """
@@ -147,8 +146,7 @@ def GraphicsInformation() -> str:
   Source: https://stackoverflow.com/questions/13867696/python-in-linux-obtain-vga-specifications-via-lspci-or-hal 
   """
 
-  graphics_output =  tuple(subprocess.check_output("lspci | awk -F':' '/VGA|3D/ {print $3}'", shell=True, executable='/bin/bash').decode("utf-8").split("\n"))
-  one, two = graphics_output
+  one, two =  tuple(subprocess.check_output("lspci | awk -F':' '/VGA|3D/ {print $3}'", shell=True, executable='/bin/bash').decode("utf-8").split("\n"))
 
   return colored(one, 'green'), colored("None" if not two else two, 'red')
 
@@ -257,7 +255,8 @@ def SystemShell():
     contents = fp.readlines()
 
   for line in contents:
-    if(_r_shell.match(line)):
+    shell_match = _r_shell.match(line)
+    if(shell_match):
       shell_path = shell_match.group("path")
       version, _ = subprocess.Popen([shell_path, '--version'],
                                           stdout=subprocess.PIPE,
@@ -269,3 +268,4 @@ def SystemShell():
 
 def SystemTerminalEmulator() -> str:
     return os.environ["TERM"]
+Fetch()
