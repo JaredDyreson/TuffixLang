@@ -90,11 +90,14 @@ def CurrentModel() -> str:
 
     product_name = "/sys/devices/virtual/dmi/id/product_name"
     product_family = "/sys/devices/virtual/dmi/id/product_family"
+    vendor_name = "/sys/devices/virtual/dmi/id/sys_vendor"
     with open(product_name, "r") as fp:
         name = fp.readline().strip('\n')
     with open(product_family, "r") as fp:
         family = fp.readline().strip('\n')
-    return "{}{}".format(name, "" if name not in family else family)
+    with open(vendor_name, "r") as fp:
+        vendor = fp.read().split()[0].strip('\n')
+    return "{} {}{}".format("" if vendor in name else vendor, name, "" if name not in family else family)
 
 def CurrentUptime() -> str:
     """
@@ -209,7 +212,6 @@ Model: {}
 Kernel: {}
 Uptime: {}
 Shell: {}
-Editor: {}
 Terminal: {}
 CPU: {}
 GPU:
@@ -230,7 +232,6 @@ Connected to Internet: {}
     CurrentKernelRevision(),
     CurrentUptime(),
     SystemShell(),
-    SystemEditor(),
     SystemTerminalEmulator(),
     CPUInformation(),
     Primary,
@@ -268,6 +269,4 @@ def SystemShell():
 def SystemTerminalEmulator() -> str:
     return os.environ["TERM"]
 
-def SystemEditor() -> str:
-    return os.environ["EDITOR"]
-
+Fetch()
