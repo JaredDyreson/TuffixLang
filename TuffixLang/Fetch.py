@@ -117,16 +117,12 @@ def CurrentUptime() -> str:
     minutes = int( ( total_seconds % HOUR ) / MINUTE )
     seconds = int( total_seconds % MINUTE )
 
-    uptime = ""
-    if days > 0:
-       uptime += str(days) + " " + (days == 1 and "day" or "days" ) + ", "
-    if len(uptime) > 0 or hours > 0:
-       uptime += str(hours) + " " + (hours == 1 and "hour" or "hours" ) + ", "
-    if len(uptime) > 0 or minutes > 0:
-       uptime += str(minutes) + " " + (minutes == 1 and "minute" or "minutes" ) + ", "
-    uptime += str(seconds) + " " + (seconds == 1 and "second" or "seconds" )
-
-    return uptime
+    return "{} {}, {} {}, {} {}, {} {}".format(
+      days, "days" if (days > 1) else "day",
+      hours, "hours" if (hours > 1) else "hour",
+      minutes, "minutes" if (minutes > 1) else "minute",
+      seconds, "seconds" if (seconds > 1) else "second"
+    )
 
 def MemoryInformation() -> int:
     """
