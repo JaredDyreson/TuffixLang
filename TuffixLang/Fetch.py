@@ -246,17 +246,18 @@ Connected to Internet: {}
   print(_Fetched)
 
 def SystemShell():
+  """
+  Goal: find the current shell of the user, rather than assuming they are using Bash
+  """
+
   path = "/etc/passwd"
   cu = CurrentNonRootUser()
   _r_shell = re.compile("^{}.*\:\/home\/{}\:(?P<path>.*)".format(cu, cu))
   with open(path, "r") as fp:
     contents = fp.readlines()
 
-  shell = None
-
   for line in contents:
-    shell_match = _r_shell.match(line)
-    if(shell_match and not shell):
+    if(_r_shell.match(line)):
       shell_path = shell_match.group("path")
       version, _ = subprocess.Popen([shell_path, '--version'],
                                           stdout=subprocess.PIPE,
@@ -268,5 +269,3 @@ def SystemShell():
 
 def SystemTerminalEmulator() -> str:
     return os.environ["TERM"]
-
-Fetch()
