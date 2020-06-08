@@ -264,4 +264,4 @@ def SystemShell():
 
 def SystemTerminalEmulator() -> str:
     return os.environ["TERM"]
-Fetch()
+
