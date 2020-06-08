@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/bin/env python3
 
 """
 Neofetch clone written in Python
@@ -18,9 +18,13 @@ from natsort import natsorted, ns
 
 TuffixStatePath = "/var/lib/tuffix/state.json"
 
-def CPUInformation():
+def CPUInformation() -> str:
+  """
+  Goal: get current CPU model name and the amount of cores
+  """
+
   path = "/proc/cpuinfo"
-  _r_cpu_core_count = re.compile("cpu family.*(?P<count>[0-9].*)")
+  _r_cpu_core_count = re.compile("cpu cores.*(?P<count>[0-9].*)")
   _r_general_model_name = re.compile("model name.*\:(?P<name>.*)")
   with open(path, "r") as fp:
     contents = fp.readlines()
@@ -39,40 +43,51 @@ def CPUInformation():
       break
   return "{} ({} cores)".format(' '.join(name.split()), cores)
 
-def ShellEnv():
-  _r_shell = r'(?P<shell>[a-z].*sh\s[0-9].*\.[0-9])'
+def CurrentNonRootUser() -> str:
+    """
+    Goal: Attempt to get the current user who is not root
+    """
 
-  out, _ = subprocess.Popen([os.environ["SHELL"], '--version'],
-                                          stdout=subprocess.PIPE,
-                                          stderr=subprocess.STDOUT).communicate()
+    return os.listdir("/home")[0]
 
-  current_shell_running = re.compile(_r_shell).match(out.decode("utf-8")).group("shell")
-  try:
-    current_editor = os.environ["EDITOR"]
-  except KeyError as error:
-    print("[-] Editor has not been defined")
+def Host() -> str:
+    """
+    Goal: get the current user logged in and the computer they are logged into
+    """
 
-  return current_shell_running, current_editor, os.environ["TERM"]
+    return "{}@{}".format(CurrentNonRootUser(), socket.gethostname())
 
-def Host():
-    return "{}@{}".format(os.environ["USER"], socket.gethostname())
+def CurrentOperatingSystem() -> str:
+    """
+    Goal: get current Linux distribution name
+    """
 
-def CurrentOperatingSystem():
     path = "/etc/os-release"
     _r_OS = r'NAME\=\"(?P<release>[a-zA-Z].*)\"'
     with open(path, "r") as fp: line = fp.readline()
-    _OS = re.compile(_r_OS).match(line).group("release")
-    return _OS
+    return re.compile(_r_OS).match(line).group("release")
 
-def Uname():
+def CurrentKernelRevision() -> str:
+    """
+    Goal: get the current kernel version
+    """
+
     path = "/proc/version"
     with open(path, "r") as fp:
         return fp.readline().split()[2]
 
-def CurrentTime():
+def CurrentTime() -> str:
+    """
+    Goal: return the current date and time
+    """
+
     return datetime.now().strftime("%a %d %B %Y %H:%M:%S")
 
-def CurrentModel():
+def CurrentModel() -> str:
+    """
+    Goal: retrieve the current make and model of the host
+    """
+
     product_name = "/sys/devices/virtual/dmi/id/product_name"
     product_family = "/sys/devices/virtual/dmi/id/product_family"
     with open(product_name, "r") as fp:
@@ -81,8 +96,12 @@ def CurrentModel():
         family = fp.readline().strip('\n')
     return "{}{}".format(name, "" if name not in family else family)
 
-# SOURCE - https://thesmithfam.org/blog/2005/11/19/python-uptime-script/
-def CurrentUptime():
+def CurrentUptime() -> str:
+    """
+    Goal: pretty print the contents of /proc/uptime
+    Source: https://thesmithfam.org/blog/2005/11/19/python-uptime-script/
+    """
+
     path = "/proc/uptime"
     with open(path, 'r') as f:
         total_seconds = float(f.readline().split()[0])
@@ -107,39 +126,47 @@ def CurrentUptime():
 
     return uptime
 
-def MemoryInformation():
+def MemoryInformation() -> int:
+    """
+    Goal: get total amount of ram on system
+    """
+    
     formatting = lambda quantity, power: quantity/(1000**power) 
     path = "/proc/meminfo"
     with open(path, "r") as fp:
-        contents = [int(line.split()[1]) for line in fp.readlines()[:3]]
-    total, free, available = tuple(contents)
-    return int(formatting(total, 2)), formatting(free, 2), formatting(available, 2), (round((free/available), 2))
+        total = int(fp.readline().split()[1])
+    return int(formatting(total, 2))
 
-def GraphicsInformation():
+def GraphicsInformation() -> str:
   """
   Use lspci to get the current graphics card in use
-  Requires pciutils to be installed
+  Requires pciutils to be installed (seems to be installed by default on Ubuntu)
+  Source: https://stackoverflow.com/questions/13867696/python-in-linux-obtain-vga-specifications-via-lspci-or-hal 
   """
 
-  # https://stackoverflow.com/questions/13867696/python-in-linux-obtain-vga-specifications-via-lspci-or-hal
+  graphics_output =  tuple(subprocess.check_output("lspci | awk -F':' '/VGA|3D/ {print $3}'", shell=True, executable='/bin/bash').decode("utf-8").split("\n"))
+  one, two = graphics_output
 
-  graphics_output =  subprocess.check_output("lspci | awk -F':' '/VGA|3D/ {print $3}'", shell=True, executable='/bin/bash').decode("utf-8").split("\n")
-  primary_out = colored("{}".format(graphics_output[0].strip()), 'green')
-  try:
-    secondary_out = colored("{}".format(graphics_output[1].strip()))
-    if(not secondary_out):
-      secondary_out = colored("NONE", 'red')
-  except IndexError:
-    secondary_out = colored("NONE", 'red')
-  return "{}\n{}".format(primary_out, secondary_out)
+  return colored(one, 'green'), colored("None" if not two else two, 'red')
 
-def GitConfiguration():
-    git_config_output = subprocess.check_output("git config --list | grep -E 'user\..*' | cut -d '=' -f2", shell=True, executable='/bin/bash').decode("utf-8").split('\n')
+
+def GitConfiguration() -> str:
+    """
+    Retrieve Git configuration information about the current user
+    """
+
+    command = "sudo -H -u {} bash -c 'git config --list | grep -E 'user\.' | cut -d '=' -f2'".format(CurrentNonRootUser())
+    git_config_output = subprocess.check_output(command, shell=True, executable='/bin/bash').decode("utf-8").split('\n')[:2]
 
     return tuple(git_config_output)
 
-def HasInternet():
-    # https://stackoverflow.com/questions/20913411/test-if-an-internet-connection-is-present-in-python/20913928
+def HasInternet() -> bool:
+    """
+    GOAL: Check if there is an internet connection by attempting to open a socket to Google.
+    If a connection cannot be established, it will return false.
+    SOURCE: https://stackoverflow.com/questions/20913411/test-if-an-internet-connection-is-present-in-python/20913928
+    """
+
     SERVER = "1.1.1.1"
     try:
       host = socket.gethostbyname(SERVER)
@@ -150,6 +177,10 @@ def HasInternet():
     return False
 
 def CurrentlyInstalledTargets() -> list:
+  """
+  GOAL: list all installed codewords in a formatted list
+  """
+
   try:
     with open(TuffixStatePath, "r") as fp:
       content = json.load(fp)["installed"]
@@ -157,18 +188,19 @@ def CurrentlyInstalledTargets() -> list:
   except FileNotFoundError as error:
     # raise proper exception defined in TuffixLib
     print("[INFO] Please initalize tuffix")
-    return ""
+    return None
   
 
-def Fetch():
-  shell, editor, term = ShellEnv()
-  physical, _, _, _ = MemoryInformation()
-  git_conf = GitConfiguration()
-  git_email, git_username = git_conf[0], git_conf[1]
-  output_devices = GraphicsInformation().split("\n")
-  primary, secondary = output_devices[0], output_devices[1]
-  installed_targets = CurrentlyInstalledTargets()
-  _fetched = """
+def Fetch() -> str:
+  """
+  GOAL: Driver code for all the components defined above
+  """
+
+  GitEmail, GitUsername = GitConfiguration()
+  Primary, Secondary = GraphicsInformation()
+  InstalledTargets = CurrentlyInstalledTargets()
+
+  _Fetched = """
 {}
 -----
 
@@ -191,24 +223,51 @@ Git Configuration:
 Installed codewords:
   {}
 Connected to Internet: {}
-
-  """.format(
+""".format(
     Host(),
     CurrentOperatingSystem(),
     CurrentModel(),
-    Uname(),
+    CurrentKernelRevision(),
     CurrentUptime(),
-    shell,
-    editor,
-    term,
+    SystemShell(),
+    SystemEditor(),
+    SystemTerminalEmulator(),
     CPUInformation(),
-    primary,
-    secondary,
-    physical,
+    Primary,
+    Secondary,
+    MemoryInformation(),
     CurrentTime(),
-    git_email,
-    git_username,
-    '\n'.join(installed_targets).strip() if (len(installed_targets) !=  0) else "None",
+    GitEmail,
+    GitUsername,
+    '\n'.join(InstalledTargets).strip() if (len(InstalledTargets) !=  0) else "None",
     "Yes" if HasInternet() else "No"
  )
-  print(_fetched)
+  print(_Fetched)
+
+def SystemShell():
+  path = "/etc/passwd"
+  cu = CurrentNonRootUser()
+  _r_shell = re.compile("^{}.*\:\/home\/{}\:(?P<path>.*)".format(cu, cu))
+  with open(path, "r") as fp:
+    contents = fp.readlines()
+
+  shell = None
+
+  for line in contents:
+    shell_match = _r_shell.match(line)
+    if(shell_match and not shell):
+      shell_path = shell_match.group("path")
+      version, _ = subprocess.Popen([shell_path, '--version'],
+                                          stdout=subprocess.PIPE,
+                                          stderr=subprocess.STDOUT).communicate()
+      shell_out = re.compile("(?P<shell>[a-z]?.*sh)\s(?P<version>[0-9].*\.[0-9])").match(version.decode("utf-8"))
+      return "{} {}".format(shell_out.group("shell"), shell_out.group("version"))
+
+  return None
+
+def SystemTerminalEmulator() -> str:
+    return os.environ["TERM"]
+
+def SystemEditor() -> str:
+    return os.environ["EDITOR"]
+
